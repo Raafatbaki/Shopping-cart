@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
 const exphbs = require('express-handlebars');
+const Handlebars = require('handlebars');
+const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 
 
 var indexRouter = require('./routes/index');
@@ -14,8 +16,8 @@ const { error } = require('console');
 var app = express();
 
 // view engine setup
-//app.engine('.hbs', exphbs.engine({ defaultLayout: 'layout', extname: '.hbs' }));
-app.set('views', path.join(__dirname, 'views'))
+app.engine('.hbs', exphbs.engine({ handlebars: allowInsecurePrototypeAccess(Handlebars), defaultLayout: 'layout', extname: '.hbs' }));
+//app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', '.hbs');
 
 app.use(logger('dev'));
