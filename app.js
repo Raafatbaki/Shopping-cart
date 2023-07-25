@@ -31,6 +31,7 @@ app.use(session({
   saveUninitialized : false ,
   resave : false,
 }));
+app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/css', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'css')));

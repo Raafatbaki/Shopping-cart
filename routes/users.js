@@ -5,7 +5,8 @@ const { check, validationResult } = require("express-validator");
 
 /* GET users listing. */
 router.get("/signUp", function (req, res, next) {
-  res.render("user/signUp");
+  let massagesError = req.flash("signUpError");
+  res.render("user/signUp", { massages: massagesError });
 });
 
 router.post(
@@ -27,7 +28,12 @@ router.post(
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      console.log(errors);
+      let validationMassages = [];
+      for (let i = 0; i < errors.errors.length; i++) {
+        validationMassages.push(errors.errors[i].msg);
+      }
+      req.flash("signUpError", validationMassages);
+      res.redirect("signup");
       return;
     }
 
@@ -39,12 +45,12 @@ router.post(
     User.find({ email: req.body.email })
       .then((result) => {
         if (result) {
-          console.log("exist");
+          req.flash("signUpError", "This Email is already exist")
+          res.redirect("signUp")
           return;
-        } 
-        else 
-        {
-          newUser.save()
+        } else {
+          newUser
+            .save()
             .then((savedUser) => {
               res.send(savedUser);
             })
@@ -56,7 +62,6 @@ router.post(
       .catch((err) => {
         console.log(err);
       });
-
   }
 );
 
