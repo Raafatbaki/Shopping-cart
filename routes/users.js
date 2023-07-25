@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const User = require("../models/user");
 const { check, validationResult } = require("express-validator");
 
 /* GET users listing. */
@@ -29,7 +30,18 @@ router.post(
       console.log(errors);
       return;
     }
-    res.send("ok");
+    const newUser = new User({
+      email: req.body.email,
+      password: new User().hashPassword(req.body.password),
+    });
+    
+    newUser.save()
+      .then((savedUser) => {
+        res.send(savedUser)
+      })
+      .catch((err) => {
+        console.log(err)
+      });
   }
 );
 
