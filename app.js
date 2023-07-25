@@ -6,7 +6,9 @@ var logger = require('morgan');
 const mongoose = require('mongoose');
 const exphbs = require('express-handlebars');
 const Handlebars = require('handlebars');
-const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
+const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access');
+const session = require('express-session');
+const flash = require('connect-flash');
 
 
 var indexRouter = require('./routes/index');
@@ -24,6 +26,11 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+  secret : 'Shopping-cart_?@!' ,
+  saveUninitialized : false ,
+  resave : false,
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/css', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'css')));
