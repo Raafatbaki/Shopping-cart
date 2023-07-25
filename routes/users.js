@@ -30,18 +30,33 @@ router.post(
       console.log(errors);
       return;
     }
+
     const newUser = new User({
       email: req.body.email,
       password: new User().hashPassword(req.body.password),
     });
-    
-    newUser.save()
-      .then((savedUser) => {
-        res.send(savedUser)
+
+    User.find({ email: req.body.email })
+      .then((result) => {
+        if (result) {
+          console.log("exist");
+          return;
+        } 
+        else 
+        {
+          newUser.save()
+            .then((savedUser) => {
+              res.send(savedUser);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
       });
+
   }
 );
 
