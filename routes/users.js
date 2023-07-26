@@ -43,7 +43,7 @@ router.post(
       password: new User().hashPassword(req.body.password),
     });
 
-    User.find({ email: req.body.email })
+    User.findone({ email: req.body.email })
       .then((result) => {
         if (result) {
           req.flash("signUpError", "This Email is already exist");
