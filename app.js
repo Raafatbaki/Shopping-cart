@@ -17,6 +17,7 @@ const { error } = require('console');
 
 var app = express();
 
+require('./config/passport');
 // view engine setup
 app.engine('.hbs', exphbs.engine({ handlebars: allowInsecurePrototypeAccess(Handlebars), defaultLayout: 'layout', extname: '.hbs' }));
 //app.set('views', path.join(__dirname, 'views'))

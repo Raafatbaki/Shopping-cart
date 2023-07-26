@@ -43,7 +43,7 @@ router.post(
       password: new User().hashPassword(req.body.password),
     });
 
-    User.findone({ email: req.body.email })
+    User.find({ email: req.body.email })
       .then((result) => {
         if (result) {
           req.flash("signUpError", "This Email is already exist");
@@ -72,10 +72,14 @@ router.get("/signIn", (req, res, next) => {
 
 router.post("/signIn", 
   passport.authenticate("local-signIn", {
-    successRedirect: "",
+    successRedirect: "/profile",
     failureRedirect: "/signIn",
     failureFlash: true,
   })
 );
+
+router.get("/profile", (req, res, next) => {
+  res.render("user/profile")
+})
 
 module.exports = router;

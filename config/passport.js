@@ -3,14 +3,14 @@ const localStrategy = require("passport-local").Strategy;
 const User = require("../models/user");
 
 
-passport.use(new localStrategy(
+passport.use("local-signIn", new localStrategy(
     {
       usernameField: "email",
       passwordField: "password",
       passReqToCallback: true,
     },
     (req, email, password, done) => {
-      User.findone({ email: email })
+      User.find({ email: email })
         .then((user) => {
           if (!user) {
             return done(null,false,req.flash("signInError", "this user not found"));
