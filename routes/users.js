@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const User = require("../models/user");
 const { check, validationResult } = require("express-validator");
+const passport = require('passport') ;
 
 /* GET users listing. */
 router.get("/signUp", function (req, res, next) {
@@ -65,6 +66,8 @@ router.post(
   }
 );
 
-
+router.get("/signIn", (req, res, next) => {
+  res.render("user/signIn")
+})
 
 module.exports = router;

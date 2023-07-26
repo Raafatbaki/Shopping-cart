@@ -9,7 +9,7 @@ const Handlebars = require('handlebars');
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access');
 const session = require('express-session');
 const flash = require('connect-flash');
-
+const passport = require('passport');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -32,6 +32,8 @@ app.use(session({
   resave : false,
 }));
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session()) ;
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/css', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'css')));
