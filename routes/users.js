@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const User = require("../models/user");
 const { check, validationResult } = require("express-validator");
-const passport = require('passport') ;
+const passport = require("passport");
 
 /* GET users listing. */
 router.get("/signUp", function (req, res, next) {
@@ -46,8 +46,8 @@ router.post(
     User.find({ email: req.body.email })
       .then((result) => {
         if (result) {
-          req.flash("signUpError", "This Email is already exist")
-          res.redirect("signUp")
+          req.flash("signUpError", "This Email is already exist");
+          res.redirect("signUp");
           return;
         } else {
           newUser
@@ -67,7 +67,15 @@ router.post(
 );
 
 router.get("/signIn", (req, res, next) => {
-  res.render("user/signIn")
-})
+  res.render("user/signIn");
+});
+
+router.post("/signIn", 
+  passport.authenticate("local-signIn", {
+    successRedirect: "",
+    failureRedirect: "/signIn",
+    failureFlash: true,
+  })
+);
 
 module.exports = router;
