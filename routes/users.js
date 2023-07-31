@@ -13,12 +13,18 @@ router.get("/signUp", function (req, res, next) {
 router.post(
   "/signUp",
   [
-    check("email").not().isEmpty().withMessage("please enter your email"),
-    check("email").isEmail().withMessage("please enter valid email"),
-    check("password").not().isEmpty().withMessage("please enter your password"),
+    check("email")
+      .not()
+      .isEmpty()
+      .withMessage("please enter your email")
+      .isEmail()
+      .withMessage("please enter valid email"),
     check("password")
+      .not()
+      .isEmpty()
+      .withMessage("please enter your password")
       .isLength({ min: 5 })
-      .withMessage("please enter pssword more than 5 char"),
+      .withMessage("please enter password more than 5 char"),
     check("confirm-password").custom((value, { req }) => {
       if (value !== req.body.password) {
         throw new Error("password and confirm-password not matched");
@@ -29,12 +35,9 @@ router.post(
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      let validationMassages = [];
-      for (let i = 0; i < errors.errors.length; i++) {
-        validationMassages.push(errors.errors[i].msg);
-      }
+      const validationMassages = errors.errors.map((error) => error.msg);
       req.flash("signUpError", validationMassages);
-      res.redirect("signup");
+      res.redirect("signUp");
       return;
     }
 
@@ -43,7 +46,7 @@ router.post(
       password: new User().hashPassword(req.body.password),
     });
 
-    User.find({ email: req.body.email })
+    User.findOne({ email: req.body.email })
       .then((result) => {
         if (result) {
           req.flash("signUpError", "This Email is already exist");
@@ -66,21 +69,48 @@ router.post(
   }
 );
 
+
 router.get("/signIn", (req, res, next) => {
   let massagesError = req.flash("signInError");
   res.render("user/signIn", { massages: massagesError });
 });
 
-router.post("/signIn", 
-  passport.authenticate("local-signIn", {
-    successRedirect: "profile",
-    failureRedirect: "signIn",
-    failureFlash: true,
-  })
+router.post(
+  "/signIn",
+  [
+    check("email")
+      .not()
+      .isEmpty()
+      .withMessage("please enter your email")
+      .isEmail()
+      .withMessage("please enter valid email"),
+    check("password")
+      .not()
+      .isEmpty()
+      .withMessage("please enter your password")
+      .isLength({ min: 5 })
+      .withMessage("please enter password more than 5 char"),
+  ],
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const validationMassages = errors.errors.map((error) => error.msg);
+      req.flash("signInError", validationMassages);
+      res.redirect("signIn");
+      return;
+    }
+
+    passport.authenticate("local-signIn", {
+      successRedirect: "profile",
+      failureRedirect: "signIn",
+      failureFlash: true,
+    })(req, res, next);
+  }
 );
 
+
 router.get("/profile", (req, res, next) => {
-  res.render("user/profile")
-})
+  res.render("user/profile");
+});
 
 module.exports = router;
