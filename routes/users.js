@@ -67,7 +67,8 @@ router.post(
 );
 
 router.get("/signIn", (req, res, next) => {
-  res.render("user/signIn");
+  let massagesError = req.flash("signInError");
+  res.render("user/signIn", { massages: massagesError });
 });
 
 router.post("/signIn", 
@@ -79,7 +80,6 @@ router.post("/signIn",
 );
 
 router.get("/profile", (req, res, next) => {
-  console.log(req.user)
   res.render("user/profile")
 })
 
