@@ -17,6 +17,14 @@ const { error } = require('console');
 
 var app = express();
 
+mongoose.connect('mongodb://127.0.0.1:27017/Shopping-cart', {useNewUrlParser: true})
+  .then(() => {
+    console.log('Connected to DB');
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
 require('./config/passport');
 // view engine setup
 app.engine('.hbs', exphbs.engine({ handlebars: allowInsecurePrototypeAccess(Handlebars), defaultLayout: 'layout', extname: '.hbs' }));
@@ -40,13 +48,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/css', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'css')));
 app.use('/js', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'js')));
 
-mongoose.connect('mongodb://127.0.0.1:27017/Shopping-cart', {useNewUrlParser: true})
-  .then(() => {
-    console.log('Connected to DB');
-  })
-  .catch((error) => {
-    console.log(error);
-  });
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
