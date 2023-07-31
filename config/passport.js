@@ -7,7 +7,7 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 passport.deserializeUser((id, done) => {
-  User.findById(id)
+  User.findById(id, ("email"))
     .then(user => {
       done(null, user);
     })

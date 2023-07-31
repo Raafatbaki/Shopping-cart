@@ -38,7 +38,7 @@ app.use(cookieParser());
 app.use(session({
   secret : 'Shopping-cart_?@!' ,
   saveUninitialized : false ,
-  resave : false,
+  resave : true,
 }));
 app.use(flash());
 app.use(passport.initialize());
