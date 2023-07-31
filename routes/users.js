@@ -41,31 +41,12 @@ router.post(
       return;
     }
 
-    const newUser = new User({
-      email: req.body.email,
-      password: new User().hashPassword(req.body.password),
-    });
-
-    User.findOne({ email: req.body.email })
-      .then((result) => {
-        if (result) {
-          req.flash("signUpError", "This Email is already exist");
-          res.redirect("signUp");
-          return;
-        } else {
-          newUser
-            .save()
-            .then((savedUser) => {
-              res.send(savedUser);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    passport.authenticate("local-signUp", {
+      session: false,
+      successRedirect: "signIn",
+      failureRedirect: "signUp",
+      failureMessage: true,
+    })(req, res, next);
   }
 );
 
