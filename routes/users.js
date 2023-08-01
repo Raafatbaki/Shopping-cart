@@ -5,9 +5,9 @@ const { check, validationResult } = require("express-validator");
 const passport = require("passport");
 
 /* GET users listing. */
-router.get("/signUp", function (req, res, next) {
+router.get("/signUp", isNotSignin, function (req, res, next) {
   let massagesError = req.flash("signUpError");
-  res.render("user/signUp", { massages: massagesError });
+  res.render("user/signUp", { massages: massagesError});
 });
 
 router.post(
@@ -50,7 +50,7 @@ router.post(
   }
 );
 
-router.get("/signIn", (req, res, next) => {
+router.get("/signIn", isNotSignin, (req, res, next) => {
   let massagesError = req.flash("signInError");
   res.render("user/signIn", { massages: massagesError });
 });
@@ -89,10 +89,10 @@ router.post(
 );
 
 router.get("/profile", isSignin, (req, res, next) => {
-  res.render("user/profile");
+  res.render("user/profile", {checkUser : true , checkProfile : true });
 });
 
-router.get("/logout", (req, res, next) => {
+router.get("/logout", isSignin, (req, res, next) => {
   req.logout(function (err) {
     if (err) {
       return next(err);
@@ -107,6 +107,16 @@ function isSignin(req, res, next) {
     return;
   }
   next();
+}
+
+function isNotSignin (req , res ,next){
+  if(req.isAuthenticated()){
+    res.redirect('/')
+    return ;
+  }
+
+  next();
+
 }
 
 module.exports = router;
