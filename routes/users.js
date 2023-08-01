@@ -50,7 +50,6 @@ router.post(
   }
 );
 
-
 router.get("/signIn", (req, res, next) => {
   let massagesError = req.flash("signInError");
   res.render("user/signIn", { massages: massagesError });
@@ -89,9 +88,21 @@ router.post(
   }
 );
 
-
-router.get("/profile", (req, res, next) => {
+router.get("/profile", isSignin, (req, res, next) => {
   res.render("user/profile");
 });
+
+router.get("/logout", isSignin, (req, res, next) => {
+  req.logOut();
+  res.redirect("/");
+});
+
+function isSignin(req, res, next) {
+  if (!req.isAuthenticated()) {
+    res.redirect("signIn");
+    return;
+  }
+  next();
+}
 
 module.exports = router;
