@@ -92,9 +92,13 @@ router.get("/profile", isSignin, (req, res, next) => {
   res.render("user/profile");
 });
 
-router.get("/logout", isSignin, (req, res, next) => {
-  req.logOut();
-  res.redirect("/");
+router.get("/logout", (req, res, next) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
 });
 
 function isSignin(req, res, next) {
