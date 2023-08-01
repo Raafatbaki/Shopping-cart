@@ -7,7 +7,7 @@ const passport = require("passport");
 /* GET users listing. */
 router.get("/signUp", isNotSignin, function (req, res, next) {
   let massagesError = req.flash("signUpError");
-  res.render("user/signUp", { massages: massagesError});
+  res.render("user/signUp", { massages: massagesError });
 });
 
 router.post(
@@ -89,7 +89,7 @@ router.post(
 );
 
 router.get("/profile", isSignin, (req, res, next) => {
-  res.render("user/profile", {checkUser : true , checkProfile : true });
+  res.render("user/profile", { checkUser: true, checkProfile: true });
 });
 
 router.get("/logout", isSignin, (req, res, next) => {
@@ -109,14 +109,12 @@ function isSignin(req, res, next) {
   next();
 }
 
-function isNotSignin (req , res ,next){
-  if(req.isAuthenticated()){
-    res.redirect('/')
-    return ;
+function isNotSignin(req, res, next) {
+  if (req.isAuthenticated()) {
+    res.redirect("/");
+    return;
   }
-
   next();
-
 }
 
 module.exports = router;
