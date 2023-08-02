@@ -49,15 +49,20 @@ router.get("/addToCart/:id/:price/:name", (req, res, next) => {
 
         return newCart.save();
       }
+      return cart;
     })
     .then((savedCart) => {
       if (savedCart) {
         console.log(savedCart);
+        res.redirect("/")
       }
     })
     .catch((error) => {
       console.log(error);
     });
+
+
+    
 });
 
 module.exports = router;
