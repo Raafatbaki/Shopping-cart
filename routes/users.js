@@ -3,11 +3,13 @@ var router = express.Router();
 const User = require("../models/user");
 const { check, validationResult } = require("express-validator");
 const passport = require("passport");
+const csrf = require('csurf') ;
 
+router.use(csrf()) ;
 /* GET users listing. */
 router.get("/signUp", isNotSignin, function (req, res, next) {
   let massagesError = req.flash("signUpError");
-  res.render("user/signUp", { massages: massagesError });
+  res.render("user/signUp", { massages: massagesError, token : req.csrfToken()});
 });
 
 router.post(
@@ -52,7 +54,7 @@ router.post(
 
 router.get("/signIn", isNotSignin, (req, res, next) => {
   let massagesError = req.flash("signInError");
-  res.render("user/signIn", { massages: massagesError });
+  res.render("user/signIn", { massages: massagesError, token : req.csrfToken()});
 });
 
 router.post(
