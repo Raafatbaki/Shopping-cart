@@ -41,32 +41,6 @@ passport.use("local-signIn", new localStrategy(
   }
 ));
 
-// passport.use('local-signUp' , new localStrategy ({
-//   usernameField : 'email' ,
-//   passwordField : 'password' ,
-//   passReqToCallback : true
-// } , ( req , email , password , done) => {
-//   User.findOne({email : email} , (err , user)=>{
-//       if(err){
-//           return done(err)
-//       }
-//       if(user){
-//           return done(null , false , req.flash('signupError' , 'this eamil already exist'))
-//       }
-//       const newUser = new User({
-//           email : email ,
-//           password : new User().hashPassword(password) ,
-//       })
-
-//       newUser.save((err , user)=>{
-//          if(err){
-//              return done(err)
-//          }
-//          return done(null , user) ;
-//       })
-//   })
-// }))
-
 
 passport.use('local-signUp', new localStrategy({
   usernameField: 'email',

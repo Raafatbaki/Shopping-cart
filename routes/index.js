@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const Product = require("../models/product");
+const Cart = require('../models/cart');
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -18,6 +19,41 @@ router.get("/", function (req, res, next) {
         products: productGrid,
         checkUser: req.isAuthenticated(),
       });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+router.get("/addToCart/:id/:price/:name", (req, res, next) => {
+
+  const cartID = req.user._id;
+  const newProductPrice = parseInt(req.params.price, 10);
+  const newProduct = {
+    _id: req.params.id,
+    price: newProductPrice,
+    name: req.params.name,
+    quantity: 1,
+  };
+
+  Cart.findById(cartID)
+    .exec()
+    .then((cart) => {
+      if (!cart) {
+        const newCart = new Cart({
+          _id: cartID,
+          totalquantity: 1,
+          totalPrice: newProductPrice,
+          selectedProduct: [newProduct],
+        });
+
+        return newCart.save();
+      }
+    })
+    .then((savedCart) => {
+      if (savedCart) {
+        console.log(savedCart);
+      }
     })
     .catch((error) => {
       console.log(error);
