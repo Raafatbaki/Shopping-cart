@@ -1,21 +1,47 @@
 const passport = require("passport");
 const localStrategy = require("passport-local").Strategy;
 const User = require("../models/user");
+const Cart = require('../models/cart') ;
 
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 passport.deserializeUser((id, done) => {
-  User.findById(id, ("email"))
-    .then(user => {
-      done(null, user);
+  User.findById(id, 'email')
+    .exec()
+    .then((user) => {
+      return Cart.findById(id).exec().then((cart) => {
+        if (!cart) {
+          return done(null, user);
+        }
+        user.cart = cart;
+        return done(null, user);
+      });
     })
-    .catch(err => {
-      done(err, null);
+    .catch((err) => {
+      return done(err, null);
     });
 });
 
+// passport.deserializeUser((id, done) => {
+//   User.findById(id, ("email"))
+//     .then(user => {
+//       done(null, user);
+//     })
+//     .catch(err => {
+//       done(err, null);
+//     });
+// });
+// User.findById(id ,('email userName contact address image') ,(err ,user)=>{
+//   Cart.findById(id , (err , cart)=>{
+//       if(!cart){
+//           return done(err , user)
+//       }
+//       user.cart = cart ;
+//       return done (err , user) ;
+//   })
+// })
 
 passport.use("local-signIn", new localStrategy(
   {

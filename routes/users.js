@@ -91,7 +91,12 @@ router.post(
 );
 
 router.get("/profile", isSignin, (req, res, next) => {
-  res.render("user/profile", { checkUser: true, checkProfile: true });
+  if(req.user.cart){
+    totalProducts = req.user.cart.totalquantity
+  }else{
+    totalProducts = 0
+  } 
+  res.render("user/profile", { checkUser: true, checkProfile: true, totalProducts: totalProducts});
 });
 
 router.get("/logout", isSignin, (req, res, next) => {
