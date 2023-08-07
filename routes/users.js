@@ -3,13 +3,16 @@ var router = express.Router();
 const User = require("../models/user");
 const { check, validationResult } = require("express-validator");
 const passport = require("passport");
-const csrf = require('csurf') ;
+const csrf = require("csurf");
 
-router.use(csrf()) ;
+router.use(csrf());
 /* GET users listing. */
 router.get("/signUp", isNotSignin, function (req, res, next) {
   let massagesError = req.flash("signUpError");
-  res.render("user/signUp", { massages: massagesError, token : req.csrfToken()});
+  res.render("user/signUp", {
+    massages: massagesError,
+    token: req.csrfToken(),
+  });
 });
 
 router.post(
@@ -54,7 +57,10 @@ router.post(
 
 router.get("/signIn", isNotSignin, (req, res, next) => {
   let massagesError = req.flash("signInError");
-  res.render("user/signIn", { massages: massagesError, token : req.csrfToken()});
+  res.render("user/signIn", {
+    massages: massagesError,
+    token: req.csrfToken(),
+  });
 });
 
 router.post(
@@ -91,12 +97,16 @@ router.post(
 );
 
 router.get("/profile", isSignin, (req, res, next) => {
-  if(req.user.cart){
-    totalProducts = req.user.cart.totalquantity
-  }else{
-    totalProducts = 0
-  } 
-  res.render("user/profile", { checkUser: true, checkProfile: true, totalProducts: totalProducts});
+  if (req.user.cart) {
+    totalProducts = req.user.cart.totalquantity;
+  } else {
+    totalProducts = 0;
+  }
+  res.render("user/profile", {
+    checkUser: true,
+    checkProfile: true,
+    totalProducts: totalProducts,
+  });
 });
 
 router.get("/logout", isSignin, (req, res, next) => {

@@ -12,7 +12,6 @@ router.get("/", function (req, res, next) {
     } else {
       totalProducts = 0;
     }
-
   }
   Product.find({})
     .then((docs) => {
@@ -27,7 +26,7 @@ router.get("/", function (req, res, next) {
         title: "Shopping-cart",
         products: productGrid,
         checkUser: req.isAuthenticated(),
-        totalProducts: totalProducts
+        totalProducts: totalProducts,
       });
     })
     .catch((error) => {
@@ -35,9 +34,7 @@ router.get("/", function (req, res, next) {
     });
 });
 
-
-
-router.get('/addToCart/:id/:price/:name', (req, res, next) => {
+router.get("/addToCart/:id/:price/:name", (req, res, next) => {
   const cartID = req.user._id;
   const newProductPrice = parseInt(req.params.price, 10);
   const newProduct = {
@@ -81,16 +78,13 @@ router.get('/addToCart/:id/:price/:name', (req, res, next) => {
       }
     })
     .then((savedCart) => {
-      console.log(savedCart);  
-      res.redirect('/');
+      console.log(savedCart);
+      res.redirect("/");
     })
     .catch((error) => {
       console.log(error);
-      res.redirect('/');
+      res.redirect("/");
     });
 });
-
-
-
 
 module.exports = router;
